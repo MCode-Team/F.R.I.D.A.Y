@@ -6,7 +6,7 @@ from typing import Any
 import litellm
 from litellm import acompletion
 
-from nanobot.providers.base import LLMProvider, LLMResponse, ToolCallRequest
+from friday.providers.base import LLMProvider, LLMResponse, ToolCallRequest
 
 
 class LiteLLMProvider(LLMProvider):

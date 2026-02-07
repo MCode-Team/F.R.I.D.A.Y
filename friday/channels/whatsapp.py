@@ -6,10 +6,10 @@ from typing import Any
 
 from loguru import logger
 
-from nanobot.bus.events import OutboundMessage
-from nanobot.bus.queue import MessageBus
-from nanobot.channels.base import BaseChannel
-from nanobot.config.schema import WhatsAppConfig
+from friday.bus.events import OutboundMessage
+from friday.bus.queue import MessageBus
+from friday.channels.base import BaseChannel
+from friday.config.schema import WhatsAppConfig
 
 
 class WhatsAppChannel(BaseChannel):

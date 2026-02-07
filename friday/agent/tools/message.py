@@ -2,8 +2,8 @@
 
 from typing import Any, Callable, Awaitable
 
-from nanobot.agent.tools.base import Tool
-from nanobot.bus.events import OutboundMessage
+from friday.agent.tools.base import Tool
+from friday.bus.events import OutboundMessage
 
 
 class MessageTool(Tool):

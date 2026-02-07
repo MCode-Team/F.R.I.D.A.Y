@@ -1,4 +1,4 @@
-"""CLI commands for nanobot."""
+"""CLI commands for friday."""
 
 import asyncio
 from pathlib import Path
@@ -7,11 +7,11 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from nanobot import __version__, __logo__
+from friday import __version__, __logo__
 
 app = typer.Typer(
-    name="nanobot",
-    help=f"{__logo__} nanobot - Personal AI Assistant",
+    name="friday",
+    help=f"{__logo__} friday - Personal AI Assistant",
     no_args_is_help=True,
 )
 
@@ -20,7 +20,7 @@ console = Console()
 
 def version_callback(value: bool):
     if value:
-        console.print(f"{__logo__} nanobot v{__version__}")
+        console.print(f"{__logo__} friday v{__version__}")
         raise typer.Exit()
 
 
@@ -30,7 +30,7 @@ def main(
         None, "--version", "-v", callback=version_callback, is_eager=True
     ),
 ):
-    """nanobot - Personal AI Assistant."""
+    """friday - Personal AI Assistant."""
     pass
 
 
@@ -41,10 +41,10 @@ def main(
 
 @app.command()
 def onboard():
-    """Initialize nanobot configuration and workspace."""
-    from nanobot.config.loader import get_config_path, save_config
-    from nanobot.config.schema import Config
-    from nanobot.utils.helpers import get_workspace_path
+    """Initialize friday configuration and workspace."""
+    from friday.config.loader import get_config_path, save_config
+    from friday.config.schema import Config
+    from friday.utils.helpers import get_workspace_path
     
     config_path = get_config_path()
     
@@ -65,12 +65,12 @@ def onboard():
     # Create default bootstrap files
     _create_workspace_templates(workspace)
     
-    console.print(f"\n{__logo__} nanobot is ready!")
+    console.print(f"\n{__logo__} friday is ready!")
     console.print("\nNext steps:")
-    console.print("  1. Add your API key to [cyan]~/.nanobot/config.json[/cyan]")
+    console.print("  1. Add your API key to [cyan]~/.friday/config.json[/cyan]")
     console.print("     Get one at: https://openrouter.ai/keys")
-    console.print("  2. Chat: [cyan]nanobot agent -m \"Hello!\"[/cyan]")
-    console.print("\n[dim]Want Telegram/WhatsApp? See: https://github.com/HKUDS/nanobot#-chat-apps[/dim]")
+    console.print("  2. Chat: [cyan]friday agent -m \"Hello!\"[/cyan]")
+    console.print("\n[dim]Want Telegram/WhatsApp? See: https://github.com/HKUDS/friday#-chat-apps[/dim]")
 
 
 
@@ -91,7 +91,7 @@ You are a helpful AI assistant. Be concise, accurate, and friendly.
 """,
         "SOUL.md": """# Soul
 
-I am nanobot, a lightweight AI assistant.
+I am friday, a lightweight AI assistant.
 
 ## Personality
 
@@ -157,21 +157,21 @@ def gateway(
     port: int = typer.Option(18790, "--port", "-p", help="Gateway port"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output"),
 ):
-    """Start the nanobot gateway."""
-    from nanobot.config.loader import load_config, get_data_dir
-    from nanobot.bus.queue import MessageBus
-    from nanobot.providers.litellm_provider import LiteLLMProvider
-    from nanobot.agent.loop import AgentLoop
-    from nanobot.channels.manager import ChannelManager
-    from nanobot.cron.service import CronService
-    from nanobot.cron.types import CronJob
-    from nanobot.heartbeat.service import HeartbeatService
+    """Start the friday gateway."""
+    from friday.config.loader import load_config, get_data_dir
+    from friday.bus.queue import MessageBus
+    from friday.providers.litellm_provider import LiteLLMProvider
+    from friday.agent.loop import AgentLoop
+    from friday.channels.manager import ChannelManager
+    from friday.cron.service import CronService
+    from friday.cron.types import CronJob
+    from friday.heartbeat.service import HeartbeatService
     
     if verbose:
         import logging
         logging.basicConfig(level=logging.DEBUG)
     
-    console.print(f"{__logo__} Starting nanobot gateway on port {port}...")
+    console.print(f"{__logo__} Starting friday gateway on port {port}...")
     
     config = load_config()
     
@@ -186,7 +186,7 @@ def gateway(
 
     if not api_key and not is_bedrock:
         console.print("[red]Error: No API key configured.[/red]")
-        console.print("Set one in ~/.nanobot/config.json under providers.openrouter.apiKey")
+        console.print("Set one in ~/.friday/config.json under providers.openrouter.apiKey")
         raise typer.Exit(1)
     
     provider = LiteLLMProvider(
@@ -222,7 +222,7 @@ def gateway(
             chat_id=job.payload.to or "direct",
         )
         if job.payload.deliver and job.payload.to:
-            from nanobot.bus.events import OutboundMessage
+            from friday.bus.events import OutboundMessage
             await bus.publish_outbound(OutboundMessage(
                 channel=job.payload.channel or "cli",
                 chat_id=job.payload.to,
@@ -288,10 +288,10 @@ def agent(
     session_id: str = typer.Option("cli:default", "--session", "-s", help="Session ID"),
 ):
     """Interact with the agent directly."""
-    from nanobot.config.loader import load_config
-    from nanobot.bus.queue import MessageBus
-    from nanobot.providers.litellm_provider import LiteLLMProvider
-    from nanobot.agent.loop import AgentLoop
+    from friday.config.loader import load_config
+    from friday.bus.queue import MessageBus
+    from friday.providers.litellm_provider import LiteLLMProvider
+    from friday.agent.loop import AgentLoop
     
     config = load_config()
     
@@ -359,7 +359,7 @@ app.add_typer(channels_app, name="channels")
 @channels_app.command("status")
 def channels_status():
     """Show channel status."""
-    from nanobot.config.loader import load_config
+    from friday.config.loader import load_config
 
     config = load_config()
 
@@ -401,7 +401,7 @@ def _get_bridge_dir() -> Path:
     import subprocess
     
     # User's bridge location
-    user_bridge = Path.home() / ".nanobot" / "bridge"
+    user_bridge = Path.home() / ".friday" / "bridge"
     
     # Check if already built
     if (user_bridge / "dist" / "index.js").exists():
@@ -413,7 +413,7 @@ def _get_bridge_dir() -> Path:
         raise typer.Exit(1)
     
     # Find source bridge: first check package data, then source dir
-    pkg_bridge = Path(__file__).parent.parent / "bridge"  # nanobot/bridge (installed)
+    pkg_bridge = Path(__file__).parent.parent / "bridge"  # friday/bridge (installed)
     src_bridge = Path(__file__).parent.parent.parent / "bridge"  # repo root/bridge (dev)
     
     source = None
@@ -424,7 +424,7 @@ def _get_bridge_dir() -> Path:
     
     if not source:
         console.print("[red]Bridge source not found.[/red]")
-        console.print("Try reinstalling: pip install --force-reinstall nanobot")
+        console.print("Try reinstalling: pip install --force-reinstall friday")
         raise typer.Exit(1)
     
     console.print(f"{__logo__} Setting up bridge...")
@@ -484,8 +484,8 @@ def cron_list(
     all: bool = typer.Option(False, "--all", "-a", help="Include disabled jobs"),
 ):
     """List scheduled jobs."""
-    from nanobot.config.loader import get_data_dir
-    from nanobot.cron.service import CronService
+    from friday.config.loader import get_data_dir
+    from friday.cron.service import CronService
     
     store_path = get_data_dir() / "cron" / "jobs.json"
     service = CronService(store_path)
@@ -538,9 +538,9 @@ def cron_add(
     channel: str = typer.Option(None, "--channel", help="Channel for delivery (e.g. 'telegram', 'whatsapp')"),
 ):
     """Add a scheduled job."""
-    from nanobot.config.loader import get_data_dir
-    from nanobot.cron.service import CronService
-    from nanobot.cron.types import CronSchedule
+    from friday.config.loader import get_data_dir
+    from friday.cron.service import CronService
+    from friday.cron.types import CronSchedule
     
     # Determine schedule type
     if every:
@@ -575,8 +575,8 @@ def cron_remove(
     job_id: str = typer.Argument(..., help="Job ID to remove"),
 ):
     """Remove a scheduled job."""
-    from nanobot.config.loader import get_data_dir
-    from nanobot.cron.service import CronService
+    from friday.config.loader import get_data_dir
+    from friday.cron.service import CronService
     
     store_path = get_data_dir() / "cron" / "jobs.json"
     service = CronService(store_path)
@@ -593,8 +593,8 @@ def cron_enable(
     disable: bool = typer.Option(False, "--disable", help="Disable instead of enable"),
 ):
     """Enable or disable a job."""
-    from nanobot.config.loader import get_data_dir
-    from nanobot.cron.service import CronService
+    from friday.config.loader import get_data_dir
+    from friday.cron.service import CronService
     
     store_path = get_data_dir() / "cron" / "jobs.json"
     service = CronService(store_path)
@@ -613,8 +613,8 @@ def cron_run(
     force: bool = typer.Option(False, "--force", "-f", help="Run even if disabled"),
 ):
     """Manually run a job."""
-    from nanobot.config.loader import get_data_dir
-    from nanobot.cron.service import CronService
+    from friday.config.loader import get_data_dir
+    from friday.cron.service import CronService
     
     store_path = get_data_dir() / "cron" / "jobs.json"
     service = CronService(store_path)
@@ -635,14 +635,14 @@ def cron_run(
 
 @app.command()
 def status():
-    """Show nanobot status."""
-    from nanobot.config.loader import load_config, get_config_path
+    """Show friday status."""
+    from friday.config.loader import load_config, get_config_path
 
     config_path = get_config_path()
     config = load_config()
     workspace = config.workspace_path
 
-    console.print(f"{__logo__} nanobot Status\n")
+    console.print(f"{__logo__} friday Status\n")
 
     console.print(f"Config: {config_path} {'[green]✓[/green]' if config_path.exists() else '[red]✗[/red]'}")
     console.print(f"Workspace: {workspace} {'[green]✓[/green]' if workspace.exists() else '[red]✗[/red]'}")

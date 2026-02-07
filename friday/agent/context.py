@@ -6,8 +6,8 @@ import platform
 from pathlib import Path
 from typing import Any
 
-from nanobot.agent.memory import MemoryStore
-from nanobot.agent.skills import SkillsLoader
+from friday.agent.memory import MemoryStore
+from friday.agent.skills import SkillsLoader
 
 
 class ContextBuilder:
@@ -78,9 +78,9 @@ Skills with available="false" need dependencies installed first - you can try in
         system = platform.system()
         runtime = f"{'macOS' if system == 'Darwin' else system} {platform.machine()}, Python {platform.python_version()}"
         
-        return f"""# nanobot 🐈
+        return f"""# friday 🐈
 
-You are nanobot, a helpful AI assistant. You have access to tools that allow you to:
+You are friday, a helpful AI assistant. You have access to tools that allow you to:
 - Read, write, and edit files
 - Execute shell commands
 - Search the web and fetch web pages

@@ -1,4 +1,4 @@
-# Nanobot Sales Agent Blueprint (Tiles / Sanitaryware)
+# Friday Sales Agent Blueprint (Tiles / Sanitaryware)
 
 ## Scope
 - Data source: `masterdata.master_product` + `masterdata.master_product_br` (+ branch/province)

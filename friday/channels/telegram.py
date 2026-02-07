@@ -7,10 +7,10 @@ from loguru import logger
 from telegram import Update
 from telegram.ext import Application, MessageHandler, filters, ContextTypes
 
-from nanobot.bus.events import OutboundMessage
-from nanobot.bus.queue import MessageBus
-from nanobot.channels.base import BaseChannel
-from nanobot.config.schema import TelegramConfig
+from friday.bus.events import OutboundMessage
+from friday.bus.queue import MessageBus
+from friday.channels.base import BaseChannel
+from friday.config.schema import TelegramConfig
 
 
 def _markdown_to_telegram_html(text: str) -> str:
@@ -187,7 +187,7 @@ class TelegramChannel(BaseChannel):
         
         user = update.effective_user
         await update.message.reply_text(
-            f"👋 Hi {user.first_name}! I'm nanobot.\n\n"
+            f"👋 Hi {user.first_name}! I'm friday.\n\n"
             "Send me a message and I'll respond!"
         )
     
@@ -243,7 +243,7 @@ class TelegramChannel(BaseChannel):
                 
                 # Save to workspace/media/
                 from pathlib import Path
-                media_dir = Path.home() / ".nanobot" / "media"
+                media_dir = Path.home() / ".friday" / "media"
                 media_dir.mkdir(parents=True, exist_ok=True)
                 
                 file_path = media_dir / f"{media_file.file_id[:16]}{ext}"
@@ -253,7 +253,7 @@ class TelegramChannel(BaseChannel):
                 
                 # Handle voice transcription
                 if media_type == "voice" or media_type == "audio":
-                    from nanobot.providers.transcription import GroqTranscriptionProvider
+                    from friday.providers.transcription import GroqTranscriptionProvider
                     transcriber = GroqTranscriptionProvider(api_key=self.groq_api_key)
                     transcription = await transcriber.transcribe(file_path)
                     if transcription:

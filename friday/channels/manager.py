@@ -5,10 +5,10 @@ from typing import Any
 
 from loguru import logger
 
-from nanobot.bus.events import OutboundMessage
-from nanobot.bus.queue import MessageBus
-from nanobot.channels.base import BaseChannel
-from nanobot.config.schema import Config
+from friday.bus.events import OutboundMessage
+from friday.bus.queue import MessageBus
+from friday.channels.base import BaseChannel
+from friday.config.schema import Config
 
 
 class ChannelManager:
@@ -35,7 +35,7 @@ class ChannelManager:
         # Telegram channel
         if self.config.channels.telegram.enabled:
             try:
-                from nanobot.channels.telegram import TelegramChannel
+                from friday.channels.telegram import TelegramChannel
                 self.channels["telegram"] = TelegramChannel(
                     self.config.channels.telegram,
                     self.bus,
@@ -48,7 +48,7 @@ class ChannelManager:
         # WhatsApp channel
         if self.config.channels.whatsapp.enabled:
             try:
-                from nanobot.channels.whatsapp import WhatsAppChannel
+                from friday.channels.whatsapp import WhatsAppChannel
                 self.channels["whatsapp"] = WhatsAppChannel(
                     self.config.channels.whatsapp, self.bus
                 )
@@ -59,7 +59,7 @@ class ChannelManager:
         # Discord channel
         if self.config.channels.discord.enabled:
             try:
-                from nanobot.channels.discord import DiscordChannel
+                from friday.channels.discord import DiscordChannel
                 self.channels["discord"] = DiscordChannel(
                     self.config.channels.discord, self.bus
                 )
@@ -70,7 +70,7 @@ class ChannelManager:
         # Feishu channel
         if self.config.channels.feishu.enabled:
             try:
-                from nanobot.channels.feishu import FeishuChannel
+                from friday.channels.feishu import FeishuChannel
                 self.channels["feishu"] = FeishuChannel(
                     self.config.channels.feishu, self.bus
                 )

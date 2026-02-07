@@ -9,10 +9,10 @@ import httpx
 import websockets
 from loguru import logger
 
-from nanobot.bus.events import OutboundMessage
-from nanobot.bus.queue import MessageBus
-from nanobot.channels.base import BaseChannel
-from nanobot.config.schema import DiscordConfig
+from friday.bus.events import OutboundMessage
+from friday.bus.queue import MessageBus
+from friday.channels.base import BaseChannel
+from friday.config.schema import DiscordConfig
 
 
 DISCORD_API_BASE = "https://discord.com/api/v10"
@@ -156,9 +156,9 @@ class DiscordChannel(BaseChannel):
                 "token": self.config.token,
                 "intents": self.config.intents,
                 "properties": {
-                    "os": "nanobot",
-                    "browser": "nanobot",
-                    "device": "nanobot",
+                    "os": "friday",
+                    "browser": "friday",
+                    "device": "friday",
                 },
             },
         }
@@ -199,7 +199,7 @@ class DiscordChannel(BaseChannel):
 
         content_parts = [content] if content else []
         media_paths: list[str] = []
-        media_dir = Path.home() / ".nanobot" / "media"
+        media_dir = Path.home() / ".friday" / "media"
 
         for attachment in payload.get("attachments") or []:
             url = attachment.get("url")

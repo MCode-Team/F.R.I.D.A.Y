@@ -3,7 +3,7 @@
 from pathlib import Path
 from datetime import datetime
 
-from nanobot.utils.helpers import ensure_dir, today_date
+from friday.utils.helpers import ensure_dir, today_date
 
 
 class MemoryStore:

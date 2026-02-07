@@ -1,4 +1,4 @@
-"""Utility functions for nanobot."""
+"""Utility functions for friday."""
 
 from pathlib import Path
 from datetime import datetime
@@ -11,8 +11,8 @@ def ensure_dir(path: Path) -> Path:
 
 
 def get_data_path() -> Path:
-    """Get the nanobot data directory (~/.nanobot)."""
-    return ensure_dir(Path.home() / ".nanobot")
+    """Get the friday data directory (~/.friday)."""
+    return ensure_dir(Path.home() / ".friday")
 
 
 def get_workspace_path(workspace: str | None = None) -> Path:
@@ -20,7 +20,7 @@ def get_workspace_path(workspace: str | None = None) -> Path:
     Get the workspace path.
     
     Args:
-        workspace: Optional workspace path. Defaults to ~/.nanobot/workspace.
+        workspace: Optional workspace path. Defaults to ~/.friday/workspace.
     
     Returns:
         Expanded and ensured workspace path.
@@ -28,7 +28,7 @@ def get_workspace_path(workspace: str | None = None) -> Path:
     if workspace:
         path = Path(workspace).expanduser()
     else:
-        path = Path.home() / ".nanobot" / "workspace"
+        path = Path.home() / ".friday" / "workspace"
     return ensure_dir(path)
 
 

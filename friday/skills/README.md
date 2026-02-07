@@ -1,6 +1,6 @@
-# nanobot Skills
+# friday Skills
 
-This directory contains built-in skills that extend nanobot's capabilities.
+This directory contains built-in skills that extend friday's capabilities.
 
 ## Skill Format
 
